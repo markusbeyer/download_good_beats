@@ -29,5 +29,9 @@ else:
 
 if lesgooo == True:
     url = "https://drive.google.com/drive/folders/1WjQxT1s_oW8AXsvmO4rAcL2b5h4fmW95?usp=sharing"
-    output = "eagle"
+    print(clear)
+    print("DOWNLOADING...")
     gdown.download_folder(url, quiet=True)
+    print(clear)
+    print("DONE!!!")
+    time.sleep(1)
