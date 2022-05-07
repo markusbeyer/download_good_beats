@@ -33,12 +33,7 @@ for x, y, z in os.walk(os.getcwd()):
     else:
         for i in z:
             print(" |-"+i)
-            file = str(os.path.abspath(i))
-            file = re.sub(r'^.*?GDrive', 'GDrive', file)
-            file = file.replace("GDrive_Updater","")
-            print(file)
-            os.path.getatime(os.path.abspath(file))
-            print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(file))).strftime("%A, %B %d, %Y %I:%M:%S"))
-            print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(file))).strftime("%A, %B %d, %Y %I:%M:%S"))
-            print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(filei))).strftime("%A, %B %d, %Y %I:%M:%S"))
-            print("File   Size  : "+str(os.path.getsize(file))+" Bytes")
+            print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+            print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+            print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+            print("File   Size  : "+str(os.path.getsize(i))+" Bytes")
