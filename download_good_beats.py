@@ -15,6 +15,17 @@ clear      = "\033[2J\033[1;1f"
 # Beats By Brendlef link
 url = "https://drive.google.com/drive/folders/1WjQxT1s_oW8AXsvmO4rAcL2b5h4fmW95?usp=sharing"
 
+def get_size(start_path = '.'):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):                                                   # trying for a func to get true file/folder size
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            # skip if it is symbolic link
+            if not os.path.islink(fp):
+                total_size += os.path.getsize(fp)
+    return total_size
+print(get_size(), 'bytes')
+
 print("You're about to download the newest Beats by Brendlef!")
 time.sleep(1)
 print("You down?")
@@ -40,7 +51,7 @@ else:
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
 print("DOWNLOADING...")
-gdown.download_folder(url, quiet=True)
+#gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
 print("DONE!!!")
 time.sleep(1)
@@ -56,8 +67,8 @@ for x, y, z in os.walk(os.getcwd()): # x = main folder | y = subfolders | z = fi
     print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")) # MAIN FOLDER
     print("Created      : "+datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
-    #print("Folder Size  : "+str(os.path.getsize(x))+" Bytes")  incorrect value
-    print("Folder Size  : "+str(sum([os.path.getsize(x) for x in os.listdir('.') if os.path.isfile(x)]))+" Bytes")
+    #print("Folder Size  : "+str(os.path.getsize(x))+" Bytes")                                                      incorrect value
+    #print("Folder Size  : "+str(sum([os.path.getsize(x) for x in os.listdir('.') if os.path.isfile(x)]))+" Bytes") also wrong?
     print("-Folders in "+folder+":")
     if not y:
         print(" |NO FOLDERS IN "+folder+"!")
@@ -67,7 +78,8 @@ for x, y, z in os.walk(os.getcwd()): # x = main folder | y = subfolders | z = fi
             print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
             print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(i)).strftime("%A, %B %d, %Y %I:%M:%S")) # SUB FOLDERS
             print("Created      : "+datetime.fromtimestamp(os.path.getctime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
-            print("Folder Size  : "+str(os.path.getsize(i))+" Bytes")
+            #print("Folder Size  : "+str(os.path.getsize(i))+" Bytes")                                                      incorrect value
+            #print("Folder Size  : "+str(sum([os.path.getsize(i) for i in os.listdir('.') if os.path.isfile(i)]))+" Bytes") also wrong?
     print("-Files   in "+folder+":")
     if not z:
         print(" |-NO FILES IN "+folder+"!")
