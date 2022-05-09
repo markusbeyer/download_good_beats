@@ -1,7 +1,8 @@
-import gdown, time, os
+import gdown, time, os, math
 from   colorama import *
 from   art      import *
 from   datetime import datetime
+
 #TO-DO list dirs  + timestamp (OPT: list size and log data for later comparison)
 #TO-DO list files + timestamp + highlight most recent changes with colors
 #TO-DO highlight new files
@@ -15,38 +16,91 @@ clear      = "\033[2J\033[1;1f"
 # Beats By Brendlef link
 url = "https://drive.google.com/drive/folders/1WjQxT1s_oW8AXsvmO4rAcL2b5h4fmW95?usp=sharing"
 
-def get_size(start_path = '.'):
-    total_size = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):                                                   # trying for a func to get true file/folder size
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            # skip if it is symbolic link
-            if not os.path.islink(fp):
-                total_size += os.path.getsize(fp)
-    return total_size
-print(get_size(), 'bytes')
+# Function to convert size to displayable information
+def convert_size(size_bytes):
+   if size_bytes == 0:
+       return "0B"
+   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+   i = int(math.floor(math.log(size_bytes, 1024)))
+   p = math.pow(1024, i)
+   s = round(size_bytes / p, 2)
+   return "%s %s" % (s, size_name[i])
 
-print("You're about to download the newest Beats by Brendlef!")
-time.sleep(1)
-print("You down?")
-time.sleep(1)
-print("(1) CHEAH | NAH (2)")
-choice = input("")
-if choice == "1":
-    print("THAT'S WASSUP!")
-    time.sleep(1)
-    print("Les gooo")
-    time.sleep(1)
-elif choice == "2":
-    print("Ait f u den")
-    time.sleep(1)
-    print("busta")
-    time.sleep(1)
-    os._exit(0)
-else:
-    print("That ain't it")
-    time.sleep(1)
-    os._exit(0)
+# Function to get info about beats in program folder, compare and deliver report
+def get_info():
+    folder_main_list  = []
+    folder_size_list  = []
+    folder_atime_list = []
+    folder_mtime_list = []
+    folder_ctime_list = []
+    #walking through downloaded folders
+    #filenames = next(os.walk(os.getcwd()), (None, None, []))[2]
+    #accessing files and folders for information
+    for x, y, z in os.walk(os.getcwd()): # x = main folder | y = subfolders | z = files
+        # avoid getting info about git folder
+        if "git" in str(x):
+            continue
+        folder_size = 0
+        for f in z:
+                fp = os.path.join(x, f)
+                # skip if it is symbolic link
+                if not os.path.islink(fp):
+                    folder_size += os.path.getsize(fp)
+        folder = str(os.path.basename(x))             #  get main folder name, last accessed time, last modified time, creation time and size in bytes
+        tprint(folder, font="cyber")
+        print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
+        print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")) # MAIN FOLDER
+        print("Created      : "+datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
+        print("Folder Size  : "+str(convert_size(folder_size)))
+        folder_main_list.append(str(x))
+        folder_size_list.append(str(convert_size(folder_size)))
+        folder_atime_list.append(str(datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
+        folder_mtime_list.append(str(datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
+        folder_ctime_list.append(str(datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
+        print("-Folders in "+folder+":")
+        if not y:
+            print(" |NO FOLDERS IN "+folder+"!")
+        else:
+            for i in y:
+                print(" |"+i)                         #  get sub  folder name, last accessed time, last modified time, creation time and size in bytes
+                print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
+                print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(i)).strftime("%A, %B %d, %Y %I:%M:%S")) # SUB FOLDERS
+                print("Created      : "+datetime.fromtimestamp(os.path.getctime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
+                #print("Folder Size  : "+str(os.path.getsize(i))+" Bytes")                                                      incorrect value
+                #print("Folder Size  : "+str(sum([os.path.getsize(i) for i in os.listdir('.') if os.path.isfile(i)]))+" Bytes") also wrong?
+        print("-Files   in "+folder+":")
+        if not z:
+            print(" |-NO FILES IN "+folder+"!")
+        else:
+            for i in z:
+                print(" |-"+i)
+                #print(pathlib.Path.stat(str(i)))
+                #file = str(os.path.abspath(i))
+                #file = re.sub(r'^.*?GDrive', 'GDrive', file)
+                #file = file.replace("GDrive_Updater","")
+                #print(file)
+                #print(str(pathlib.Path.stat(pathlib.Path(os.path.relpath(i))))+")")
+                #os.path.getatime(os.path.abspath(file))
+                #print("done")                         #  get file name, last accessed time, last modified time, creation time and size in bytes
+                #print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+                #print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
+                #print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+                #print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
+                #
+                #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
+    if "intel" in locals():
+        intel2 = dict(zip(folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list))
+        #do comparison
+        shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
+        print(len(shared_items))
+    else:
+        intel  = dict(zip(folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list))
+        return intel
+
+#################################################################################### PROGRAM START ####################################################################################
+
+#getting intel about current beats
+get_info()
 
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
@@ -55,48 +109,6 @@ print("DOWNLOADING...")
 print(clear)
 print("DONE!!!")
 time.sleep(1)
-#walking through downloaded folders
-filenames = next(os.walk(os.getcwd()), (None, None, []))[2]
-#accessing files and folders for information
-for x, y, z in os.walk(os.getcwd()): # x = main folder | y = subfolders | z = files
-    # avoid getting info about git folder
-    if "git" in str(x):
-        continue
-    folder = str(os.path.basename(x))             #  get main folder name, last accessed time, last modified time, creation time and size in bytes
-    tprint(folder, font="cyber")
-    print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
-    print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")) # MAIN FOLDER
-    print("Created      : "+datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
-    #print("Folder Size  : "+str(os.path.getsize(x))+" Bytes")                                                      incorrect value
-    #print("Folder Size  : "+str(sum([os.path.getsize(x) for x in os.listdir('.') if os.path.isfile(x)]))+" Bytes") also wrong?
-    print("-Folders in "+folder+":")
-    if not y:
-        print(" |NO FOLDERS IN "+folder+"!")
-    else:
-        for i in y:
-            print(" |"+i)                         #  get sub  folder name, last accessed time, last modified time, creation time and size in bytes
-            print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
-            print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(i)).strftime("%A, %B %d, %Y %I:%M:%S")) # SUB FOLDERS
-            print("Created      : "+datetime.fromtimestamp(os.path.getctime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
-            #print("Folder Size  : "+str(os.path.getsize(i))+" Bytes")                                                      incorrect value
-            #print("Folder Size  : "+str(sum([os.path.getsize(i) for i in os.listdir('.') if os.path.isfile(i)]))+" Bytes") also wrong?
-    print("-Files   in "+folder+":")
-    if not z:
-        print(" |-NO FILES IN "+folder+"!")
-    else:
-        for i in z:
-            print(" |-"+i)
-            #print(pathlib.Path.stat(str(i)))
-            #file = str(os.path.abspath(i))
-            #file = re.sub(r'^.*?GDrive', 'GDrive', file)
-            #file = file.replace("GDrive_Updater","")
-            #print(file)
-            #print(str(pathlib.Path.stat(pathlib.Path(os.path.relpath(i))))+")")
-            #os.path.getatime(os.path.abspath(file))
-            #print("done")                         #  get file name, last accessed time, last modified time, creation time and size in bytes
-            #print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
-            #print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
-            #print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
-            #print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
-            #
-            #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
+
+#getting intel about new beats and comparing with old ones
+get_info()
