@@ -90,18 +90,19 @@ def get_info():
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
     # COMPARING OLD BEATS WITH NEW BEATS
     global intel
-    intel = ""
-    if "intel" != "":
+    if intel in locals():
         print("Checking new beats...")
+        time.sleep(1)
         fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
         values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
         intel2 = dict(zip(fields,values))
         #do comparison
-        print("COMPARING...")
+        input("COMPARING...")
         shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
         print(len(shared_items))
     else:
         print("Checking current beats...")
+        time.sleep(1)
         fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
         values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
         intel = dict(zip(fields,values))
