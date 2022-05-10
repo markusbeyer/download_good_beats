@@ -88,14 +88,23 @@ def get_info():
                 #print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
                 #
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
-    if "intel" in locals():
-        intel2 = dict(zip(folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list))
+    # COMPARING OLD BEATS WITH NEW BEATS
+    global intel
+    intel = ""
+    if "intel" != "":
+        print("Checking new beats...")
+        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
+        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
+        intel2 = dict(zip(fields,values))
         #do comparison
+        print("COMPARING...")
         shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
         print(len(shared_items))
     else:
-        intel  = dict(zip(folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list))
-        return intel
+        print("Checking current beats...")
+        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
+        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
+        intel = dict(zip(fields,values))
 
 #################################################################################### PROGRAM START ####################################################################################
 
