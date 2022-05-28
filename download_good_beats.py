@@ -74,14 +74,13 @@ def get_info(mode):
         else:
             for i in z:
                 try:
-                    print(" |-"+i)
-                    print("done")                         #  get file name, last accessed time, last modified time, creation time and size in bytes
+                    print(" |-"+i)                        #  get file name, last accessed time, last modified time, creation time and size in bytes
                     print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
                     print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
                 except FileNotFoundError:
-                    print(str(i)+" not found.")
+                    print(" |-"+str(i)+" not found.")
                     continue
                 #
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
