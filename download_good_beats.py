@@ -1,4 +1,4 @@
-import gdown, time, os, math
+import gdown, time, os, math, pathlib
 from   colorama import *
 from   art      import *
 from   datetime import datetime
@@ -73,19 +73,16 @@ def get_info(mode):
             print(" |-NO FILES IN "+folder+"!")
         else:
             for i in z:
-                print(" |-"+i)
-                #print(pathlib.Path.stat(str(i)))
-                #file = str(os.path.abspath(i))
-                #file = re.sub(r'^.*?GDrive', 'GDrive', file)
-                #file = file.replace("GDrive_Updater","")
-                #print(file)
-                #print(str(pathlib.Path.stat(pathlib.Path(os.path.relpath(i))))+")")
-                #os.path.getatime(os.path.abspath(file))
-                #print("done")                         #  get file name, last accessed time, last modified time, creation time and size in bytes
-                #print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
-                #print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
-                #print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
-                #print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
+                try:
+                    print(" |-"+i)
+                    print("done")                         #  get file name, last accessed time, last modified time, creation time and size in bytes
+                    print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+                    print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
+                    print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
+                    print("File   Size  : "+str(os.path.getsize(i))+" Bytes")  
+                except FileNotFoundError:
+                    print(str(i)+" not found.")
+                    continue
                 #
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
     # COMPARING OLD BEATS WITH NEW BEATS
