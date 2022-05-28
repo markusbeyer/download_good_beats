@@ -27,7 +27,7 @@ def convert_size(size_bytes):
    return "%s %s" % (s, size_name[i])
 
 # Function to get info about beats in program folder, compare and deliver report
-def get_info():
+def get_info(mode):
     folder_main_list  = []
     folder_size_list  = []
     folder_atime_list = []
@@ -89,36 +89,42 @@ def get_info():
                 #
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
     # COMPARING OLD BEATS WITH NEW BEATS
-    global intel
-    if intel in locals():
+    if mode == 1:
+        print("Checking current beats...")
+        time.sleep(1)
+        global intel
+        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
+        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
+        intel = dict(zip(fields,values))
+    elif mode == 2:
         print("Checking new beats...")
         time.sleep(1)
         fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
         values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
         intel2 = dict(zip(fields,values))
         #do comparison
-        input("COMPARING...")
-        shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
-        print(len(shared_items))
-    else:
-        print("Checking current beats...")
-        time.sleep(1)
-        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
-        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
-        intel = dict(zip(fields,values))
+        print("COMPARING...")
+        if intel == intel2:
+            print("NO CHANGES!")
+        else:
+            print("SOMETHING CHANGED!")
+            time.sleep(1)
+            # DISPLAYING CHANGES
+            shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
+            print(len(shared_items))
 
 #################################################################################### PROGRAM START ####################################################################################
 
 #getting intel about current beats
-get_info()
+get_info(1)
 
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
 print("DOWNLOADING...")
-#gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
+gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
 print("DONE!!!")
 time.sleep(1)
 
 #getting intel about new beats and comparing with old ones
-get_info()
+get_info(2)
