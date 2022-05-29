@@ -1,11 +1,10 @@
-import gdown, time, os, math, pathlib
+import gdown, time, os, math
 from   colorama import *
 from   art      import *
 from   datetime import datetime
 
-#TO-DO list dirs  + timestamp (OPT: list size and log data for later comparison)
-#TO-DO list files + timestamp + highlight most recent changes with colors
-#TO-DO highlight new files
+# fix file details
+# fix comparison
 
 #initializing colorama for the "clear" variable being able to clear the screen
 init()
@@ -74,6 +73,7 @@ def get_info(mode):
         else:
             for i in z:
                 try:
+                    print(z)
                     print(" |-"+i)                        #  get file name, last accessed time, last modified time, creation time and size in bytes
                     print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(i))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
@@ -82,8 +82,7 @@ def get_info(mode):
                 except FileNotFoundError:
                     print(" |-"+str(i)+" not found.")
                     continue
-                #
-                #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
+                #  DOESNT WORK DUE TO WHITE SPACE IN USERNAME
     # COMPARING OLD BEATS WITH NEW BEATS
     if mode == 1:
         print("Checking current beats...")
