@@ -29,11 +29,10 @@ def convert_size(size_bytes):
 def get_info(mode):
     folder_main_list  = []
     folder_size_list  = []
-    folder_atime_list = []
     folder_mtime_list = []
     folder_ctime_list = []
-    #walking through downloaded folders
-    #filenames = next(os.walk(os.getcwd()), (None, None, []))[2]
+    file_main_list    = []
+    file_size_list    = []
     #accessing files and folders for information
     for x, y, z in os.walk(os.getcwd()): # x = main folder | y = subfolders | z = files
         # avoid getting info about git folder
@@ -47,13 +46,11 @@ def get_info(mode):
                     folder_size += os.path.getsize(fp)
         folder = str(os.path.basename(x))             #  get main folder name, last accessed time, last modified time, creation time and size in bytes
         tprint(folder, font="cyber")
-        print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
         print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")) # MAIN FOLDER
         print("Created      : "+datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
         print("Folder Size  : "+str(convert_size(folder_size)))
         folder_main_list.append(str(x))
         folder_size_list.append(str(convert_size(folder_size)))
-        folder_atime_list.append(str(datetime.fromtimestamp(os.path.getatime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
         folder_mtime_list.append(str(datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
         folder_ctime_list.append(str(datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
         print("-Folders in "+folder+":")
@@ -62,7 +59,6 @@ def get_info(mode):
         else:
             for i in y:
                 print(" |"+i)                         #  get sub  folder name, last accessed time, last modified time, creation time and size in bytes
-                print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
                 print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(i)).strftime("%A, %B %d, %Y %I:%M:%S")) # SUB FOLDERS
                 print("Created      : "+datetime.fromtimestamp(os.path.getctime(i)).strftime("%A, %B %d, %Y %I:%M:%S"))
                 #print("Folder Size  : "+str(os.path.getsize(i))+" Bytes")                                                      incorrect value
@@ -75,10 +71,11 @@ def get_info(mode):
                 try:
                     print(" |-"+i)                        #  get file name, last accessed time, last modified time, creation time and size in bytes
                     beat = str(x)+"\\"+str(i)                    
-                    print("Last accessed: "+datetime.fromtimestamp(os.path.getatime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
                     print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("File   Size  : "+str(os.path.getsize(beat))+" Bytes")  
+                    file_main_list.append(str(i))
+                    file_size_list.append(str(convert_size(os.path.getsize(beat))))
                 except FileNotFoundError:
                     print(" |-"+str(i)+" not found.")
                     continue
@@ -88,26 +85,38 @@ def get_info(mode):
     if mode == 1:
         print("Checking current beats...")
         time.sleep(1)
-        global intel
-        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
-        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
-        intel = dict(zip(fields,values))
+        global intel_folder, intel_file
+        fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
+        values = [folder_main_list,folder_size_list, folder_mtime_list, folder_ctime_list]
+        intel_folder = dict(zip(fields,values))
+        fields = ["File Name", "File Size"]
+        values = [file_main_list,file_size_list]
+        intel_file = dict(zip(fields,values))
     elif mode == 2:
         print("Checking new beats...")
         time.sleep(1)
-        fields = ["Folder Name", "Folder Size", "Folder Access Time", "Folder Modify Time", "Folder Creation Time"]
-        values = [folder_main_list,folder_size_list,folder_atime_list, folder_mtime_list, folder_ctime_list]
-        intel2 = dict(zip(fields,values))
+        fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
+        values = [folder_main_list,folder_size_list, folder_mtime_list, folder_ctime_list]
+        intel2_folder = dict(zip(fields,values))
+        fields = ["File Name", "File Size"]
+        values = [file_main_list,file_size_list]
+        intel2_file = dict(zip(fields,values))
         #do comparison
         print("COMPARING...")
-        if intel == intel2:
+        time.sleep(1)
+        if intel_folder == intel2_folder:
             print("NO CHANGES!")
         else:
             print("SOMETHING CHANGED!")
             time.sleep(1)
             # DISPLAYING CHANGES
-            for diff in list(dictdiffer.diff(intel, intel2)):
+            for diff in list(dictdiffer.diff(intel_folder, intel2_folder)):
+                print("FOLDER DIFFERENCE")
                 print(diff)
+                for dif in list(dictdiffer.diff(intel_file,intel2_file)):
+                    print("FILE DIFFERENCE")
+                    print(dif)
+
 
 #################################################################################### PROGRAM START ####################################################################################
 
@@ -119,7 +128,7 @@ print(clear)
 print("DOWNLOADING...")
 #gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
-print("DONE!!!")
+input("DONE!!!")
 time.sleep(1)
 
 #getting intel about new beats and comparing with old ones
