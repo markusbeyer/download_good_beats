@@ -1,4 +1,4 @@
-import gdown, time, os, math
+import gdown, time, os, math, dictdiffer
 from   colorama import *
 from   art      import *
 from   datetime import datetime
@@ -106,8 +106,8 @@ def get_info(mode):
             print("SOMETHING CHANGED!")
             time.sleep(1)
             # DISPLAYING CHANGES
-            shared_items = {k: intel[k] for k in intel if k in intel2 and intel[k] == intel2[k]}
-            print(len(shared_items))
+            for diff in list(dictdiffer.diff(intel, intel2)):
+                print(diff)
 
 #################################################################################### PROGRAM START ####################################################################################
 
@@ -117,7 +117,7 @@ get_info(1)
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
 print("DOWNLOADING...")
-gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
+#gdown.download_folder(url, quiet=True)                       # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
 print("DONE!!!")
 time.sleep(1)
