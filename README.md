@@ -1,6 +1,6 @@
 # GDrive_Updater (Google Drive Updater)
 
-GDU is designed to download, update and report information of Beats by Brendlef.
+GDU is designed to download, update and report information as well as changes of Beats by Brendlef.
 
 Beats by Brendlef are Beats created by the Artist Brendlef.
 
