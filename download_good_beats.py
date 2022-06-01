@@ -113,15 +113,20 @@ def get_info(mode):
             for diff in list(dictdiffer.diff(intel_folder, intel2_folder)):
                 print("FOLDER DIFFERENCE")
                 foldif = diff
-                if   foldif[0] == "change":
+                if   foldif[0] == "change": # if Folder Size in info1[0] or if Modify Time
                     info1 = foldif[1]
                     info2 = foldif[2]
                     print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+str(info2[0])+" to "+str(info2[1])+".")
                 elif  foldif[0] == "remove":
-                    if "Folder Creation Time" in 
-                    info1 = foldif[1]
-                    info2 = foldif[2]
-                    print(str())
+                    if "Folder Creation Time" in foldif[1]:
+                        info = str(foldif[2]).replace("(","").replace(")","")
+                        print(info)
+                        info = info.split(",")
+                        print(type(info))
+                        print(info)
+                        print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is "+str(info[1])+".")
+                    else:
+                        print(foldif)
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                     print("FILE DIFFERENCE")
                     print(dif)
