@@ -121,7 +121,7 @@ def get_info(mode):
                     if "Folder Creation Time" in foldif[1]:
                         info = str(foldif[2]).replace("(","").replace(")","")
                         print(info)
-                        info = info.split(",") # splits too much
+                        info = info.split(",") # splits still too much
                         print(info)
                         print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is "+str(info[1])+".")
                     else:
