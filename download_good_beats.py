@@ -101,7 +101,7 @@ def get_info(mode):
         fields = ["File Name", "File Size"]
         values = [file_main_list,file_size_list]
         intel2_file = dict(zip(fields,values))
-        #do comparison
+        # COMPARING BEATS
         print("COMPARING...")
         time.sleep(1)
         if intel_folder == intel2_folder:
@@ -112,7 +112,16 @@ def get_info(mode):
             # DISPLAYING CHANGES
             for diff in list(dictdiffer.diff(intel_folder, intel2_folder)):
                 print("FOLDER DIFFERENCE")
-                print(diff)
+                foldif = diff
+                if   foldif[0] == "change":
+                    info1 = foldif[1]
+                    info2 = foldif[2]
+                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+str(info2[0])+" to "+str(info2[1])+".")
+                elif  foldif[0] == "remove":
+                    if "Folder Creation Time" in 
+                    info1 = foldif[1]
+                    info2 = foldif[2]
+                    print(str())
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                     print("FILE DIFFERENCE")
                     print(dif)
