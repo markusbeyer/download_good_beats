@@ -120,12 +120,12 @@ def get_info(mode):
                 elif  foldif[0] == "remove":
                     if "Folder Creation Time" in foldif[1]:
                         info = str(foldif[2]).replace("(","").replace(")","")
-                        print(info)
+                        info = info.replace("[","").replace("'","").replace("]","")
                         info = info.split(",") # splits still too much
-                        print(info)
-                        print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is "+str(info[1])+".")
+                        dt   = str(info[1])+" "+str(info[2])+" "+str(info[3])
+                        print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is "+dt+".")
                     else:
-                        print(foldif)
+                        print("")
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                     print("FILE DIFFERENCE")
                     print(dif)
