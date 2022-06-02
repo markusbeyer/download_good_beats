@@ -111,25 +111,34 @@ def get_info(mode):
             time.sleep(1)
             # DISPLAYING CHANGES
             for diff in list(dictdiffer.diff(intel_folder, intel2_folder)):
-                print("FOLDER DIFFERENCE")
                 foldif = diff
                 if   foldif[0] == "change": # if Folder Size in info1[0] or if Modify Time
                     info1 = foldif[1]
                     info2 = foldif[2]
                     print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+str(info2[0])+" to "+str(info2[1])+".")
-                elif  foldif[0] == "remove":
-                    if "Folder Creation Time" in foldif[1]:
-                        info = str(foldif[2]).replace("(","").replace(")","")
-                        info = info.replace("[","").replace("'","").replace("]","")
-                        info = info.split(",") # splits still too much
-                        dt   = str(info[1])+" "+str(info[2])+" "+str(info[3])
-                        print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is "+dt+".")
-                    else:
-                        print("")
+                    for dif in list(dictdiffer.diff(intel_file,intel2_file)):
+                        fildif = dif
+                        if   fildif[0] == "change" and "File Size" in fildif[1]:
+                            print("File "+str(fildif[2])+" changed in Size.")
+                            #print(str(fildif[3]))
+                        elif fildif[0] == "remove" and "File Name" in fildif[1]:
+                            print("File "+str(fildif[2])+" was removed.")
+                elif  foldif[0] == "remove" and "Folder Creation Time" in foldif[1]:
+                    info = str(foldif[2]).replace("(","").replace(")","")
+                    info = info.replace("[","").replace("'","").replace("]","")
+                    info = info.split(",") # splits still too much
+                    dt   = str(info[1])+str(info[2])+str(info[3])
+                    print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is"+dt+".")
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
-                    print("FILE DIFFERENCE")
-                    print(dif)
-
+                    fildif = dif
+                    if fildif[0] == "change" and "File Name" in fildif[1]:
+                        info = fildif[2]
+                        print("File "+str(info[0])+" was renamed to "+str(info[1]+"."))
+                for dif in list(dictdiffer.diff(intel_file,intel2_file)):
+                        fildif = dif
+                        if fildif[0] == "remove" and "File Name" in fildif[1]:
+                            print("File "+str(fildif[2])+" was removed.")
+                    
 
 #################################################################################### PROGRAM START ####################################################################################
 
