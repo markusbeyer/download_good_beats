@@ -115,7 +115,7 @@ def get_info(mode):
                 if   foldif[0] == "change": # if Folder Size in info1[0] or if Modify Time
                     info1 = foldif[1]
                     info2 = foldif[2]
-                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+str(info2[0])+" to "+str(info2[1])+".")
+                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")##########
                     for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                         fildif = dif
                         if   fildif[0] == "change" and "File Size" in fildif[1]:
