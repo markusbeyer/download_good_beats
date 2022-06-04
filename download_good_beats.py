@@ -120,25 +120,35 @@ def get_info(mode):
                     # if Folder Size in info1[0] or if Modify Time
                     info1 = foldif[1]
                     info2 = foldif[2]
-                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
 
-                    if done == False:
-                        done = True
-                        for fildif in list(dictdiffer.diff(intel_file,intel2_file)):
+                    if "Folder Size" in info1[0]:
+
+                        print("Size of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
+
+                        if done == False:
+                            done = True
+                            for fildif in list(dictdiffer.diff(intel_file,intel2_file)):
                         
-                            if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
-                                print("File "+str(fildif[2])+" changed in Size.")
-                                #print(str(fildif[3]))
-                            elif fildif[0] == "remove" and "File Name" in fildif[1]: # listing all files that got removed
-                                removed = re.findall("'([^']*)'",str(fildif[2]))
-                                if len(removed) > 1:
-                                    removed = str(removed).replace("[","").replace("]","")
-                                    print("Files "+str(removed)+" were removed.")
-                                else:
-                                    removed = str(removed).replace("[","").replace("]","")
-                                    print("File " +str(removed)+" was removed.")
+                                if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
+                                    print("File "+str(fildif[2])+" changed in Size.")
+                                    #print(str(fildif[3]))
+                                elif fildif[0] == "remove" and "File Name" in fildif[1]: # listing all files that got removed
+                                    removed = re.findall("'([^']*)'",str(fildif[2]))
+                                    if len(removed) > 1:
+                                        removed = str(removed).replace("[","").replace("]","")
+                                        print("Files "+str(removed)+" were removed.")
+                                    else:
+                                        removed = str(removed).replace("[","").replace("]","")
+                                        print("File " +str(removed)+" was removed.")
+                    elif "Modify Time" in info1[0]:
 
-                   
+                        print("Modify Time of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
+
+                        for fildif in list(dictdiffer.diff(intel_file,intel2_file)):
+                            
+                            if fildif[0] == "change" and "File Name" in fildif[1]:
+                                info = fildif[2]
+                                print("File "+str(info[0])+" was renamed to "+str(info[1]+"."))
 
                 elif  foldif[0] == "remove" and "Folder Creation Time" in foldif[1]: # checking if a Folder got removed in its entirety
                     info = str(foldif[2]).replace("(","").replace(")","")
