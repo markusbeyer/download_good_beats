@@ -1,4 +1,4 @@
-import gdown, time, os, math, dictdiffer
+import gdown, time, os, math, dictdiffer, re
 from   colorama import *
 from   art      import *
 from   datetime import datetime
@@ -83,7 +83,7 @@ def get_info(mode):
                 #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
     # COMPARING OLD BEATS WITH NEW BEATS
     if mode == 1:
-        print("Checking current beats...")
+        print("Checking current beats...") #CHECK OLD BEATS
         time.sleep(1)
         global intel_folder, intel_file
         fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
@@ -92,8 +92,9 @@ def get_info(mode):
         fields = ["File Name", "File Size"]
         values = [file_main_list,file_size_list]
         intel_file = dict(zip(fields,values))
+
     elif mode == 2:
-        print("Checking new beats...")
+        print("Checking new beats...") #CHECK NEW BEATS
         time.sleep(1)
         fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
         values = [folder_main_list,folder_size_list, folder_mtime_list, folder_ctime_list]
@@ -102,7 +103,7 @@ def get_info(mode):
         values = [file_main_list,file_size_list]
         intel2_file = dict(zip(fields,values))
         # COMPARING BEATS
-        print("COMPARING...")
+        print("COMPARING...") # COMPARE OLD BEATS WITH NEW BEATS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         time.sleep(1)
         if intel_folder == intel2_folder:
             print("NO CHANGES!")
@@ -112,28 +113,40 @@ def get_info(mode):
             # DISPLAYING CHANGES
             for diff in list(dictdiffer.diff(intel_folder, intel2_folder)):
                 foldif = diff
-                if   foldif[0] == "change": # if Folder Size in info1[0] or if Modify Time
+                if   foldif[0] == "change": 
+
+                    # if Folder Size in info1[0] or if Modify Time
                     info1 = foldif[1]
                     info2 = foldif[2]
-                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")##########
+                    print(str(info1[0])+" of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
+
                     for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                         fildif = dif
                         if   fildif[0] == "change" and "File Size" in fildif[1]:
                             print("File "+str(fildif[2])+" changed in Size.")
                             #print(str(fildif[3]))
                         elif fildif[0] == "remove" and "File Name" in fildif[1]:
-                            print("File "+str(fildif[2])+" was removed.")
+                            removed = re.findall("'([^']*)'",str(fildif[2]))
+                            if len(removed) > 1:
+                                removed = str(removed)replace("[","").replace("]","")
+                                print("Files "+str(removed)+" were removed.")
+                            else:
+                                removed = str(removed)replace("[","").replace("]","")
+                                print("File " +str(removed)+" was removed.")
+
                 elif  foldif[0] == "remove" and "Folder Creation Time" in foldif[1]:
                     info = str(foldif[2]).replace("(","").replace(")","")
                     info = info.replace("[","").replace("'","").replace("]","")
                     info = info.split(",") # splits still too much
                     dt   = str(info[1])+str(info[2])+str(info[3])
                     print("Folder '"+str(info[0])+"' was removed. It's recorded Creation Date is"+dt+".")
+
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                     fildif = dif
                     if fildif[0] == "change" and "File Name" in fildif[1]:
                         info = fildif[2]
                         print("File "+str(info[0])+" was renamed to "+str(info[1]+"."))
+
                 for dif in list(dictdiffer.diff(intel_file,intel2_file)):
                         fildif = dif
                         if fildif[0] == "remove" and "File Name" in fildif[1]:
