@@ -1,6 +1,6 @@
-# GDrive_Updater (Google Drive Updater)
+# download_good_beats
 
-GDU is designed to download, update and report information as well as changes (folder size, file size, removed or new, modify time) of Beats by Brendlef.
+download_good_beats is designed to download, update and report information as well as changes (folder size, file size, removed or new, modify time) of Beats by Brendlef.
 
 Beats by Brendlef are Beats created by the Artist Brendlef.
 
