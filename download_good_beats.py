@@ -131,7 +131,7 @@ def get_info(mode):
                         
                                 if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
                                     print("File "+str(fildif[2])+" changed in Size.")
-                                    #print(str(fildif[3]))
+                                    #print(str(fildif[3])) ??
                                 elif fildif[0] == "remove" and "File Name" in fildif[1]: # listing all files that got removed
                                     removed = re.findall("'([^']*)'",str(fildif[2]))
                                     if len(removed) > 1:
