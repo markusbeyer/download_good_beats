@@ -75,7 +75,7 @@ def get_info(mode):
                     beat = str(x)+"\\"+str(i)                    
                     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
                     print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S"))
-                    print("File   Size  : "+str(os.path.getsize(beat))+" Bytes")  
+                    print("File   Size  : "+str(convert_size(os.path.getsize(beat)))+" Bytes")  
                     file_main_list.append(str(i))
                     file_size_list.append(str(convert_size(os.path.getsize(beat))))
                 except FileNotFoundError:
