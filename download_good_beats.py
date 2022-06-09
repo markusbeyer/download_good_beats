@@ -180,3 +180,5 @@ time.sleep(1)
 
 #getting intel about new beats and comparing with old ones
 get_info(2)
+
+# compare without libraries? use multiple dicts (file size, file name, file modify time?)
