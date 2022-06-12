@@ -94,6 +94,7 @@ def get_info(mode):
         fields = ["File Name", "File Size"]
         values = [file_main_list,file_size_list]
         intel_file = dict(zip(fields,values))
+        dirlist = [ name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name)) ]
 
     elif mode == 2:
         print("Checking new beats...") #CHECK NEW BEATS
@@ -104,6 +105,8 @@ def get_info(mode):
         fields = ["File Name", "File Size"]
         values = [file_main_list,file_size_list]
         intel2_file = dict(zip(fields,values))
+        dirlist2 = [ name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name)) ]
+
         # COMPARING BEATS
         print("COMPARING...") # COMPARE OLD BEATS WITH NEW BEATS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         time.sleep(1)
@@ -173,7 +176,7 @@ get_info(1)
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
 print("DOWNLOADING...")
-#gdown.download_folder(url, quiet=True)                         # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
+gdown.download_folder(url, quiet=True)                         # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
 input("DONE!!!")
 time.sleep(1)
