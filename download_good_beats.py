@@ -114,6 +114,9 @@ def get_info(mode):
             print("NO CHANGES!")
         else:
             print("SOMETHING CHANGED!")
+            # RENAMES ARE TRICKY, IT GETS MIXED UP
+            # REMOVES ARE TRICKY, IT GETS MIXED UP, THINKS ITS RENAMES
+            # resizes are good
             time.sleep(1)
             ##### DISPLAYING CHANGES ## DISPLAYING CHANGES ## DISPLAYING CHANGES #####
             for foldif in list(dictdiffer.diff(intel_folder, intel2_folder)):
@@ -131,10 +134,16 @@ def get_info(mode):
                         if done == False:
                             done = True
                             for fildif in list(dictdiffer.diff(intel_file,intel2_file)):
+
+                                info3 = fildif[1]
+                                info4 = fildif[2]
                         
                                 if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
-                                    print("File "+str(fildif[2])+" changed in Size.")
-                                    #print(str(fildif[3])) ???
+                                    print("File "+str(info3[1])+" changed in Size from"+str(info4[0]+" to "+str(info4[1])+"."))
+                                    print(fildif)
+                                    print(info3)   # file name??? where is it?
+                                    print(info4)
+                                    
                                 elif fildif[0] == "remove" and "File Name" in fildif[1]: # listing all files that got removed
                                     removed = re.findall("'([^']*)'",str(fildif[2]))
                                     if len(removed) > 1:
