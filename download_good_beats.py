@@ -82,7 +82,7 @@ def get_info(mode):
                     print(" |-"+str(i)+" not found.")
                     continue
                 #
-                #  DOESNT WORK DUE TO WHITE SPACE IN MY USERNAME1
+                #  DOESNT WORK WITH WHITE SPACE IN USER PATH
     # COMPARING OLD BEATS WITH NEW BEATS
     if mode == 1:
         print("Checking current beats...") #CHECK OLD BEATS
@@ -176,9 +176,9 @@ get_info(1)
 # DOWNLOADING BEATS BY BRENDLEF
 print(clear)
 print("DOWNLOADING...")
-gdown.download_folder(url, quiet=True)                         # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
+#gdown.download_folder(url, quiet=True)                         # DOWNLOADING BEATS, NOT NECESSARY FOR EACH TEST
 print(clear)
-input("DONE!!!")
+input("DONE!!!") #for debugging only
 time.sleep(1)
 
 #getting intel about new beats and comparing with old ones
