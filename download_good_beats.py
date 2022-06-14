@@ -129,7 +129,7 @@ def get_info(mode):
 
                     if "Folder Size" in info1[0]:
 
-                        print("Size of Folder '"+str(info1[1])+"' changed from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
+                        print("Folder '"+str(info1[1])+"' changed ins Size from "+os.path.basename(str(info2[0]))+" to "+os.path.basename(str(info2[1]))+".")
 
                         if done == False:
                             done = True
@@ -139,10 +139,12 @@ def get_info(mode):
                                 info4 = fildif[2]
                         
                                 if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
-                                    print("File "+str(info3[1])+" changed in Size from"+str(info4[0]+" to "+str(info4[1])+"."))
-                                    print(fildif)
-                                    print(info3)   # file name??? where is it?
-                                    print(info4)
+                                    try:
+                                        print(intel2_file)
+                                        filename = str(list(intel2_file.keys())[list(intel2_file.values()).index(str(info4[1]))])
+                                        print("File "+filename+" changed in Size from "+str(info4[0]+" to "+str(info4[1])+"."))
+                                    except:
+                                        print("File 'UNKNOWN' changed in Size from "+str(info4[0]+" to "+str(info4[1])+"."))
                                     
                                 elif fildif[0] == "remove" and "File Name" in fildif[1]: # listing all files that got removed
                                     removed = re.findall("'([^']*)'",str(fildif[2]))
