@@ -140,8 +140,12 @@ def get_info(mode):
                         
                                 if   fildif[0] == "change" and "File Size" in fildif[1]: # listing all files that changed in size
                                     try:
-                                        print(intel2_file)
-                                        filename = str(list(intel2_file.keys())[list(intel2_file.values()).index(str(info4[1]))])
+                                        for i in intel2_file:
+                                            if i == "File Name":
+                                                continue
+                                            else:
+                                                for x in intel2_file[i]: # cant iterate through strings... godamn
+                                                    filename = str(list(intel2_file.keys())[list(intel2_file.values()).index(str(info4[1]))])
                                         print("File "+filename+" changed in Size from "+str(info4[0]+" to "+str(info4[1])+"."))
                                     except:
                                         print("File 'UNKNOWN' changed in Size from "+str(info4[0]+" to "+str(info4[1])+"."))
