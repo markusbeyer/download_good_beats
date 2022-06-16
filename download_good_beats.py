@@ -28,11 +28,11 @@ def convert_size(size_bytes):
 
 # Function to get info about beats in program folder, compare and deliver report
 def get_info(mode):
-    folder_main_list  = []
+    folder_name_list  = []
     folder_size_list  = []
     folder_mtime_list = []
     folder_ctime_list = []
-    file_main_list    = []
+    file_name_list    = []
     file_size_list    = []
     done              = False
     #accessing files and folders for information
@@ -51,7 +51,7 @@ def get_info(mode):
         print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")) # MAIN FOLDER
         print("Created      : "+datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S"))
         print("Folder Size  : "+str(convert_size(folder_size)))
-        folder_main_list.append(str(x))
+        folder_name_list.append(str(x))
         folder_size_list.append(str(convert_size(folder_size)))
         folder_mtime_list.append(str(datetime.fromtimestamp(os.path.getmtime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
         folder_ctime_list.append(str(datetime.fromtimestamp(os.path.getctime(x)).strftime("%A, %B %d, %Y %I:%M:%S")))
@@ -76,7 +76,7 @@ def get_info(mode):
                     print("Last modified: "+datetime.fromtimestamp(os.path.getmtime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S")) # FILES
                     print("Created      : "+datetime.fromtimestamp(os.path.getctime(os.path.abspath(beat))).strftime("%A, %B %d, %Y %I:%M:%S"))
                     print("File   Size  : "+str(convert_size(os.path.getsize(beat)))+" Bytes")  
-                    file_main_list.append(str(i))
+                    file_name_list.append(str(i))
                     file_size_list.append(str(convert_size(os.path.getsize(beat))))
                 except FileNotFoundError:
                     print(" |-"+str(i)+" not found.")
@@ -87,25 +87,45 @@ def get_info(mode):
     if mode == 1:
         print("Checking current beats...") #CHECK OLD BEATS
         time.sleep(1)
-        global intel_folder, intel_file
+        global intel_folder_size, intel_file_size, intel_folder_mtime, intel_folder_ctime
         fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
         values = [folder_main_list,folder_size_list, folder_mtime_list, folder_ctime_list]
-        intel_folder = dict(zip(fields,values))
-        fields = ["File Name", "File Size"]
-        values = [file_main_list,file_size_list]
-        intel_file = dict(zip(fields,values))
-        dirlist = [ name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name)) ]
+
+        intel_folder_size = {} # FOLDER LIST: size
+        for i,j in zip(folder_name_list,folder_size_list):
+            intel_folder_size[i] = j
+
+        intel_folder_mtime = {} # FOLDER LIST: modify time
+        for i,j in zip(folder_name_list,folder_mtime_list):
+            intel_folder_mtime[i] = j
+
+        intel_folder_ctime = {} # FOLDER LIST: creation time
+        for i,j in zip(folder_name_list,folder_ctime_list):
+            intel_folder_ctime[i] = j
+
+        intel_file_size = {}   # FILE LIST: size
+        for i,j in zip(file_name_list,file_size_list):
+            intel_file_size[i] = j
 
     elif mode == 2:
         print("Checking new beats...") #CHECK NEW BEATS
         time.sleep(1)
-        fields = ["Folder Name", "Folder Size",  "Folder Modify Time", "Folder Creation Time"]
-        values = [folder_main_list,folder_size_list, folder_mtime_list, folder_ctime_list]
-        intel2_folder = dict(zip(fields,values))
-        fields = ["File Name", "File Size"]
-        values = [file_main_list,file_size_list]
-        intel2_file = dict(zip(fields,values))
-        dirlist2 = [ name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name)) ]
+
+        intel2_folder_size = {} # FOLDER LIST: size
+        for i,j in zip(folder_name_list,folder_size_list):
+            intel2_folder_size[i] = j
+
+        intel2_folder_mtime = {} # FOLDER LIST: modify time
+        for i,j in zip(folder_name_list,folder_mtime_list):
+            intel2_folder_mtime[i] = j
+
+        intel2_folder_ctime = {} # FOLDER LIST: creation time
+        for i,j in zip(folder_name_list,folder_ctime_list):
+            intel2_folder_ctime[i] = j
+
+        intel2_file_size = {}   # FILE LIST: size
+        for i,j in zip(file_name_list,file_size_list):
+            intel2_file_size[i] = j
 
         # COMPARING BEATS
         print("COMPARING...") # COMPARE OLD BEATS WITH NEW BEATS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -119,6 +139,15 @@ def get_info(mode):
             # resizes are good
             time.sleep(1)
             ##### DISPLAYING CHANGES ## DISPLAYING CHANGES ## DISPLAYING CHANGES #####
+
+            for dif in list(dictdiffer.diff(intel_folder_size,intel2_folder_size)): # folder size differences
+
+                if dif[0] == "change":
+                    name   = str(dif[1])
+                    change = dif[2]
+                    print("Folder "+name+ "changed in size from "+change[0]+" to "+change[1]+".")
+
+
             for foldif in list(dictdiffer.diff(intel_folder, intel2_folder)):
                 
                 if   foldif[0] == "change":  # listing all folders that changed either in size or by modify time
