@@ -142,7 +142,10 @@ def get_info(mode):
                     change = dif[2]
                     print("Folder "+ntpath.basename(name)+ " changed in size from "+change[0]+" to "+change[1]+".")
                 elif dif[0] == "remove":
-                    name   = str(dif[2]).replace("[","").replace("]","")
+                    name   = str(dif[1]).replace("[","").replace("]","").replace("(","").replace(")","")
+                    print(name)
+                    name   = tuple(map(str, name.split(',')))
+                    print(name)
                     name1  = ntpath.basename(name[0])
                     name2  = name[1]
                     print("Folder "+ntpath.basename(name1)+ " ("+name2+") was removed.")
