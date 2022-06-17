@@ -140,29 +140,26 @@ def get_info(mode):
                 if dif[0] == "change":
                     name   = str(dif[1]).replace("[","").replace("]","")
                     change = dif[2]
-                    print("Folder "+ntpath.basename(name)+ " changed in size from "+change[0]+" to "+change[1]+".")
+                    print("Folder '"+ntpath.basename(name)+ "' changed in size from "+change[0]+" to "+change[1]+".")
                 elif dif[0] == "remove":
-                    name   = str(dif[1]).replace("[","").replace("]","").replace("(","").replace(")","")
-                    print(name)
-                    name   = tuple(map(str, name.split(',')))
-                    print(name)
-                    name1  = ntpath.basename(name[0])
-                    name2  = name[1]
-                    print("Folder "+ntpath.basename(name1)+ " ("+name2+") was removed.")
+                    name   = str(dif[2]).replace("(","").replace(")","").split(",")
+                    name1  = str(name[0]).replace("[","").replace("'","")
+                    name2  = str(name[1]).replace("]","").replace(" '","").replace("'","")
+                    print("Folder '"+ntpath.basename(name1)+ "' ("+name2+") was removed.")
             
             for dif in list(dictdiffer.diff(intel_folder_mtime,intel2_folder_mtime)): # folder mtime differences
 
                 if dif[0] == "change":
                     name   = str(dif[1]).replace("[","").replace("]","")
                     change = dif[2]
-                    print("Folder "+ntpath.basename(name)+ " changed in mtime from "+change[0]+" to "+change[1]+".")
+                    print("Folder '"+ntpath.basename(name)+ "' changed in mtime from "+change[0]+" to "+change[1]+".")
 
             for dif in list(dictdiffer.diff(intel_folder_ctime,intel2_folder_ctime)): # folder ctime differences
 
                 if dif[0] == "change":
                     name   = str(dif[1]).replace("[","").replace("]","")
                     change = dif[2]
-                    print("Folder "+ntpath.basename(name)+ " changed in ctime from "+change[0]+" to "+change[1]+".")
+                    print("Folder '"+ntpath.basename(name)+ "' changed in ctime from "+change[0]+" to "+change[1]+".")
 
             for dif in list(dictdiffer.diff(intel_file_size,intel2_file_size)): # file size differences
 
@@ -175,6 +172,7 @@ def get_info(mode):
                     name1  = str(name[0]).replace("[","")
                     name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
                     print("File "+name1+ " ("+name2+") was removed.")
+                    print(dif)
 
 #################################################################################### PROGRAM START ####################################################################################
 
