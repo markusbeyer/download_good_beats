@@ -168,11 +168,21 @@ def get_info(mode):
                     change = dif[2]
                     print("File "+name+ " changed in size from "+change[0]+" to "+change[1]+".")
                 elif dif[0] == "remove":
-                    name   = str(dif[2]).replace("(","").replace(")","").split(",")
-                    name1  = str(name[0]).replace("[","")
-                    name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
-                    print("File "+name1+ " ("+name2+") was removed.")
-                    print(dif)
+                    for i in dif:
+                        if i == "remove" or i == "":
+                            continue
+                        if str(i).count(",") > 3: #if there is more than one song deleted (because if only one song was, then there are only 3 commas in i)
+                            for j in i:
+                                name   = str(j).replace("(","").replace(")","").split(",")
+                                name1  = str(name[0]).replace("[","")
+                                name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
+                                print("File "+name1+ " ("+name2+") was removed.")
+                        else:
+                            name   = str(dif[2]).replace("(","").replace(")","").split(",")
+                            name1  = str(name[0]).replace("[","")
+                            name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
+                            print("File "+name1+ " ("+name2+") was removed.")
+                    
 
 #################################################################################### PROGRAM START ####################################################################################
 
