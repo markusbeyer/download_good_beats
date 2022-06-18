@@ -145,7 +145,12 @@ def get_info(mode):
                     name   = str(dif[2]).replace("(","").replace(")","").split(",")
                     name1  = str(name[0]).replace("[","").replace("'","")
                     name2  = str(name[1]).replace("]","").replace(" '","").replace("'","")
-                    print("Folder '"+ntpath.basename(name1)+ "' ("+name2+") was removed.")
+                    print("Folder '"+ntpath.basename(name1)+ "' ("+name2+") was removed.") #multiple folders? cppy from remove multiple files
+                elif dif[0] == "add":
+                    name   = str(dif[2]).replace("(","").replace(")","").split(",")
+                    name1  = str(name[0]).replace("[","").replace("'","")
+                    name2  = str(name[1]).replace("]","").replace(" '","").replace("'","")
+                    print("Folder '"+ntpath.basename(name1)+ "' ("+name2+") was added.") #multiple folders? copy from add multiple fles
             
             for dif in list(dictdiffer.diff(intel_folder_mtime,intel2_folder_mtime)): # folder mtime differences
 
@@ -182,6 +187,21 @@ def get_info(mode):
                             name1  = str(name[0]).replace("[","")
                             name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
                             print("File "+name1+ " ("+name2+") was removed.")
+                elif dif[0] == "add":
+                    for i in dif:
+                        if i == "add" or i == "":
+                            continue
+                        if str(i).count(",") > 3: #if there is more than one song deleted (because if only one song was, then there are only 3 commas in i)
+                            for j in i:
+                                name   = str(j).replace("(","").replace(")","").split(",")
+                                name1  = str(name[0]).replace("[","")
+                                name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
+                                print("File "+name1+ " ("+name2+") was added.")
+                        else:
+                            name   = str(dif[2]).replace("(","").replace(")","").split(",")
+                            name1  = str(name[0]).replace("[","")
+                            name2  = str(name[1]).replace(" '","").replace("]","").replace("'","")
+                            print("File "+name1+ " ("+name2+") was added.")
                     
 
 #################################################################################### PROGRAM START ####################################################################################
